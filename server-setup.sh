@@ -9,8 +9,8 @@ printf "Enter WireGuard server endpoint: "
 read WG_SERVER_ENDPOINT
 
 umask 077
-wg genkey | tee /etc/wireguard/private.key
-cat /etc/wireguard/private.key | wg pubkey | tee /etc/wireguard/public.key
+wg genkey > /etc/wireguard/private.key
+cat /etc/wireguard/private.key | wg pubkey > /etc/wireguard/public.key
 
 # write file content
 printf "[Interface]\nPrivateKey = $(cat /etc/wireguard/private.key)\nAddress = ${WG_SERVER_PRIVATE_ADDRESS_CIDR}\nListenPort = 51820\nSaveConfig = true\n" | tee /etc/wireguard/wg0.conf
