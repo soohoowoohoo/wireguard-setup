@@ -16,8 +16,8 @@ printf "Enter WireGuard server endpoint: "
 read WG_SERVER_ENDPOINT
 
 umask 077
-wg genkey | tee /etc/wireguard/private.key
-cat /etc/wireguard/private.key | wg pubkey | tee /etc/wireguard/public.key
+wg genkey > /etc/wireguard/private.key
+cat /etc/wireguard/private.key | wg pubkey > /etc/wireguard/public.key
 
 # client config for routing all traffic over vpn for remote system
 PUBLIC_INTERFACE=$(ip route list table main default | awk '{print $5}')
