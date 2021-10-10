@@ -40,5 +40,8 @@
     curl 'https://ifconfig.me'
     ```
 
+### Troubleshooting
+- Of the 256 usable addresses (0-255), address 255 does not work. 
+
 ## References
 - [Digital Ocean WireGuard Setup Tutorial](https://www.digitalocean.com/community/tutorials/how-to-set-up-wireguard-on-ubuntu-20-04)
