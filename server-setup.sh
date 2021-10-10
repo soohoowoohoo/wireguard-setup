@@ -43,4 +43,7 @@ CLIENT_DNS_SERVERS=$(resolvectl dns ${WG_SERVER_PUBLIC_INTERFACE} | awk '{print 
 # print sample wireguard config
 WG_SERVER_PRIVATE_ADDRESS_CIDR_PREFIX=$(printf ${WG_SERVER_PRIVATE_ADDRESS_CIDR} | cut -d '/' -f 1 | cut -d '.' -f 1-3)
 SAMPLE_CLIENT_PRIVATE_ADDRESS_CIDR="${WG_SERVER_PRIVATE_ADDRESS_CIDR_PREFIX}.X/24"
+echo
+printf "Sample WireGuard client config:"
+echo
 printf "[Interface]\nPrivateKey = base64_encoded_peer_private_key_goes_here\nAddress = ${SAMPLE_CLIENT_PRIVATE_ADDRESS_CIDR}\nDNS = ${CLIENT_DNS_SERVERS}\n\n[Peer]\nPublicKey = $(cat /etc/wireguard/public.key)\nAllowedIPs = 0.0.0.0/0\nEndpoint = ${WG_SERVER_ENDPOINT}:51820\n"
