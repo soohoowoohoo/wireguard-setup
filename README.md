@@ -1,12 +1,14 @@
-# WireGuard Server Setup
+# WireGuard Setup
 
-1. Download script.
+## Server Setup
+1. Download script and make it executable.
     ```shell
     curl 'https://raw.githubusercontent.com/soohoowoohoo/wireguard-setup/master/server-setup.sh' --silent > server-setup.sh
+    chmod +x server-setup.sh
     ```
 2. Run server setup script with sudo.
     ```shell
-    sudo server-setup.sh
+    sudo ./server-setup.sh
     ```
 3. Add clients to your WireGuard server.
     ```shell
@@ -19,5 +21,24 @@
 3. Only IPv4 addresses supported.
 4. Linux distro is Ubuntu 20.04LTS.
 
-### References
+## Test Client Setup
+1. Download script and make it executable.
+    ```shell
+    curl 'https://raw.githubusercontent.com/soohoowoohoo/wireguard-setup/master/test-peer-setup.sh' --silent > test-peer-setup.sh
+    chmod +x test-peer-setup.sh
+    ```
+2. Run test peer setup script with sudo.
+    ```shell
+    sudo ./test-peer-setup.sh
+    ```
+3. Start the VPN tunnel.
+    ```shell
+    sudo wg-quick up wg0
+    ```
+4. Verify the tunnel works.
+    ```shell
+    curl 'https://ifconfig.me'
+    ```
+
+## References
 - [Digital Ocean WireGuard Setup Tutorial](https://www.digitalocean.com/community/tutorials/how-to-set-up-wireguard-on-ubuntu-20-04)
