@@ -26,3 +26,7 @@ PUBLIC_IP=$(ip -brief address show ${PUBLIC_INTERFACE} | awk '{print $3}' | cut 
 
 # write client WireGuard config file
 printf "[Interface]\nPrivateKey = $(cat /etc/wireguard/private.key)\nAddress = ${WG_SERVER_PRIVATE_ADDRESS_CIDR}\nDNS = ${WG_CLIENT_DNS_SERVERS}\nPostUp = ip rule add table 200 from ${PUBLIC_IP}\nPostUp = ip route add table 200 default via ${PUBLIC_GATEWAY}\nPreDown = ip rule delete table 200 from ${PUBLIC_IP}\nPreDown = ip route delete table 200 default via ${PUBLIC_GATEWAY}\n\n[Peer]\nPublicKey = ${WG_SERVER_PUBLIC_KEY}\nAllowedIPs = 0.0.0.0/0\nEndpoint = ${WG_SERVER_ENDPOINT}:51820\n" > /etc/wireguard/wg0.conf
+
+WG_SERVER_PRIVATE_ADDRESS=$(printf ${WG_SERVER_PRIVATE_ADDRESS_CIDR} | cut -d '/' -f 1)
+printf "Add the client to the server using the following command:\n"
+printf "    sudo wg set wg0 peer $(cat /etc/wireguard/public.key) allowed-ips ${WG_SERVER_PRIVATE_ADDRESS}\n"
