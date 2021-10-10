@@ -4,9 +4,13 @@
     ```shell
     curl 'https://raw.githubusercontent.com/soohoowoohoo/wireguard-setup/master/server-setup.sh' --silent > server-setup.sh
     ```
-1. Run server setup script with sudo.
+2. Run server setup script with sudo.
     ```shell
     sudo server-setup.sh
+    ```
+3. Add clients to your WireGuard server.
+    ```shell
+    sudo wg set wg0 peer ${CLIENT_PUBLIC_KEY} allowed-ips ${WG_SERVER_PRIVATE_IPS}
     ```
 
 ### Assumptions
