@@ -1,5 +1,9 @@
 # WireGuard Server Setup
 
+1. Download script.
+    ```shell
+    curl 'https://raw.githubusercontent.com/soohoowoohoo/wireguard-setup/master/server-setup.sh' --silent > server-setup.sh
+    ```
 1. Run server setup script with sudo.
     ```shell
     sudo server-setup.sh
