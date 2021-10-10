@@ -2,6 +2,7 @@
 apt update
 apt install -y wireguard
 
+echo
 printf "Enter WireGuard server allowed address CIDR: "
 read WG_SERVER_PRIVATE_ADDRESS_CIDR
 
