@@ -9,12 +9,18 @@ read WG_SERVER_PRIVATE_ADDRESS_CIDR
 printf "Enter WireGuard server endpoint: "
 read WG_SERVER_ENDPOINT
 
+printf "Enter WireGuard server port (51820): "
+read WG_SERVER_PORT
+if [ -z "${WG_SERVER_PORT}" ]; then
+    WG_SERVER_PORT=51820
+fi
+
 umask 077
 wg genkey | tee /etc/wireguard/private.key
 cat /etc/wireguard/private.key | wg pubkey | tee /etc/wireguard/public.key
 
 # write file content
-printf "[Interface]\nPrivateKey = $(cat /etc/wireguard/private.key)\nAddress = ${WG_SERVER_PRIVATE_ADDRESS_CIDR}\nListenPort = 51820\nSaveConfig = true\n" | tee /etc/wireguard/wg0.conf
+printf "[Interface]\nPrivateKey = $(cat /etc/wireguard/private.key)\nAddress = ${WG_SERVER_PRIVATE_ADDRESS_CIDR}\nListenPort = ${WG_SERVER_PORT}\nSaveConfig = true\n" | tee /etc/wireguard/wg0.conf
 printf "net.ipv4.ip_forward=1\n" | tee -a /etc/sysctl.conf
 sysctl -p
 
@@ -23,7 +29,7 @@ printf "PostUp = ufw route allow in on wg0 out on ${WG_SERVER_PUBLIC_INTERFACE}\
 
 # adding dns to ufw
 # https://www.cyberciti.biz/faq/howto-open-dns-port-53-using-ufw-ubuntu-debian/
-ufw allow 51820/udp comment 'Open Wireguard port'
+ufw allow "${WG_SERVER_PORT}/udp" comment 'Open Wireguard port'
 ufw allow 53/tcp comment 'Open port DNS tcp port 53'
 ufw allow 53/udp comment 'Open port DNS udp port 53'
 ufw allow http
@@ -47,4 +53,4 @@ SAMPLE_CLIENT_PRIVATE_ADDRESS_CIDR="${WG_SERVER_PRIVATE_ADDRESS_CIDR_PREFIX}.X/2
 echo
 printf "Sample WireGuard client config:"
 echo
-printf "[Interface]\nPrivateKey = base64_encoded_peer_private_key_goes_here\nAddress = ${SAMPLE_CLIENT_PRIVATE_ADDRESS_CIDR}\nDNS = ${CLIENT_DNS_SERVERS}\n\n[Peer]\nPublicKey = $(cat /etc/wireguard/public.key)\nAllowedIPs = 0.0.0.0/0\nEndpoint = ${WG_SERVER_ENDPOINT}:51820\n"
+printf "[Interface]\nPrivateKey = base64_encoded_peer_private_key_goes_here\nAddress = ${SAMPLE_CLIENT_PRIVATE_ADDRESS_CIDR}\nDNS = ${CLIENT_DNS_SERVERS}\n\n[Peer]\nPublicKey = $(cat /etc/wireguard/public.key)\nAllowedIPs = 0.0.0.0/0\nEndpoint = ${WG_SERVER_ENDPOINT}:${WG_SERVER_PORT}\n"
